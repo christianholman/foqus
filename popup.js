@@ -7,9 +7,10 @@ syncState();
 function updateBlockedSites() {
   chrome.storage.local.get(["blocked"], ({ blocked }) => {
     if (blocked) {
+      document.getElementById("blocked-sites").innerHTML = ``;
       Object.keys(blocked).forEach((website) => {
         const websiteNode = `<div class="blocked-site">${website}</div>`;
-        document.querySelector("#blocked-sites").innerHTML += websiteNode;
+        document.getElementById("blocked-sites").innerHTML += websiteNode;
       });
     }
   });
@@ -40,11 +41,11 @@ addWebsiteForm.addEventListener("submit", (event) => {
 
     if (hostname) {
       chrome.storage.local.get(["blocked"], ({ blocked }) =>
-        chrome.storage.local.set({ blocked: { ...blocked, [hostname]: true } })
+        chrome.storage.local
+          .set({ blocked: { ...blocked, [hostname]: true } })
+          .then(syncState)
       );
     }
-
-    syncState();
   }
 });
 
