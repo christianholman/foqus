@@ -3,9 +3,6 @@
   "name": "Foqus",
   "description": "Foqus",
   "version": "1.0",
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -13,18 +10,13 @@
       "all_frames": true
     }
   ],
-  "permissions": ["storage", "webNavigation", "tabs"],
+  "permissions": ["storage"],
   "action": {
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "blocked/blocked.html",
-        "blocked/blocked.css",
-        "blocked/blocked.js",
-        "blocked/messages.txt"
-      ],
+      "resources": ["blocked/blocked.html", "blocked/blocked.css"],
       "matches": ["<all_urls>"]
     }
   ]

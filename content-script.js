@@ -7,9 +7,6 @@ async function blockPage() {
       document.head.innerHTML += `<link rel="stylesheet" href="${chrome.runtime.getURL(
         "blocked/blocked.css"
       )}">`;
-      document.head.innerHTML += `<script src="${chrome.runtime.getURL(
-        "blocked/blocked.js"
-      )}"></script>`;
       document.close();
     });
 }
