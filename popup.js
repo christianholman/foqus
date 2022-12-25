@@ -4,12 +4,25 @@ const websiteInput = document.getElementById("website-input");
 
 syncState();
 
+function toggleSite(hostname) {
+  chrome.storage.local.get(["blocked"], ({ blocked }) =>
+    chrome.storage.local
+      .set({
+        blocked: {
+          ...blocked,
+          [hostname]: blocked[hostname] ? undefined : hostname,
+        },
+      })
+      .then(syncState)
+  );
+}
+
 function updateBlockedSites() {
   chrome.storage.local.get(["blocked"], ({ blocked }) => {
     if (blocked) {
       document.getElementById("blocked-sites").innerHTML = ``;
-      Object.keys(blocked).forEach((website) => {
-        const websiteNode = `<div class="blocked-site">${website}</div>`;
+      Object.keys(blocked).forEach((hostname) => {
+        const websiteNode = `<div class="blocked-site" value="${hostname}">${hostname}</div>`;
         document.getElementById("blocked-sites").innerHTML += websiteNode;
       });
     }
@@ -40,11 +53,7 @@ addWebsiteForm.addEventListener("submit", (event) => {
     const { hostname } = new URL(url);
 
     if (hostname) {
-      chrome.storage.local.get(["blocked"], ({ blocked }) =>
-        chrome.storage.local
-          .set({ blocked: { ...blocked, [hostname]: true } })
-          .then(syncState)
-      );
+      toggleSite(hostname);
     }
   }
 });
@@ -55,4 +64,11 @@ enabledCheckbox.addEventListener("change", (event) => {
     enabled: enabledCheckbox.checked,
   });
   syncState();
+});
+
+document.addEventListener("click", (e) => {
+  const target = e.target.closest(".blocked-site");
+  if (target) {
+    toggleSite(target.getAttribute("value"));
+  }
 });

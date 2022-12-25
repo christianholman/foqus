@@ -2,3 +2,7 @@
   width: 400px;
   height: 400px;
  } 
+
+.blocked-site-disabled {
+  color: grey;
+}
